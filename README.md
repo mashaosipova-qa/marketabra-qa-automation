@@ -5,18 +5,24 @@ UI &amp; API test automation for MarketAbra platform
 Python, Pytest, Playwright, Requests
 ### Project Structure
 ```text
-├── api/                # API Interaction Layer
-│   └── auth_api.py     # Auth methods
-├── data/               # Test Data
-│   └── test_data.py    # BASE_URL, User credentials
-├── pages/              # Page Object Model for UI automation(Planned)
-├── tests_api/          # API Tests
-│   └── test_auth.py    # Authentication tests
-├── tests_ui/           # UI Tests (Planned)
-├── conftest.py         # Pytest fixtures (Planned)
-├── pytest.ini          # Pytest configuration (Planned)
-├── README.md           # Project documentation
-└── requirements.txt    # List of project dependencies (libraries)
+├── api/                        
+│   ├── data/                   
+│   │   └── settings.py          
+│   ├── services/              
+│   │   └── auth_api.py        
+│   ├── tests/                 
+│   │   └── test_auth.py       
+│   └── conftest.py             
+├── ui/                        
+│   ├── data/                 
+│   ├── pages/                
+│   ├── tests/                 
+│   └── conftest.py             
+├── .gitignore                  
+├── LICENSE                    
+├── pytest.ini                 
+├── README.md                   
+└── requirements.txt            
 ```
 ### Setup and Installation
 1. Clone the repository:
