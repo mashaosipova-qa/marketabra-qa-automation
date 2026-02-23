@@ -1,7 +1,7 @@
 import pytest
 
 from api.services.auth_api import AuthApi
-from api.data.settings import USERS, BASE_URL
+from api.test_data.settings import USERS, BASE_URL
 
 @pytest.fixture
 def seller_auth_api():
