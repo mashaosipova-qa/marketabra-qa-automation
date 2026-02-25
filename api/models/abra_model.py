@@ -11,6 +11,20 @@ class LoginRequestModel(BaseModel):
 class LoginResponseModel(BaseModel):
     ok: bool
     result: bool
+    detail: Optional[str] = None
+    error: Optional[str] = None
+    error_code: Optional[int] = None
+
+class RefreshTokensRequestModel(BaseModel):
+    #The request body is empty here
+    pass
+
+class RefreshTokensResponseModel(BaseModel):
+    ok: bool
+    result: bool
     detail: str
     error: str
     error_code: int
+
+
+

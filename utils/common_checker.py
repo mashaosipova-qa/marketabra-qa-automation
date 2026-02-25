@@ -30,3 +30,22 @@ def validate_response(
 ) -> T:
     check_status_code(response, expected_status_code)
     return validate_model(model, response.json())
+
+
+@allure.step("Check The Difference Between Objects")
+def check_difference_between_objects(
+        actual_result, expected_result, exclude_paths: str | list[str] = None
+) -> None:
+    if isinstance(actual_result, list) and isinstance(expected_result, list):
+        comparison_data = (actual_result, expected_result)
+    elif isinstance(actual_result, BaseModel):
+        comparison_data = (actual_result, expected_result)
+    else:
+        comparison_data = (MessageToDict(actual_result), MessageToDict(expected_result))
+
+    diff = DeepDiff(
+        *comparison_data,
+        ignore_order=True,
+        exclude_paths=exclude_paths,
+    )
+    assert not diff, f"Difference: {diff}"
