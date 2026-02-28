@@ -38,4 +38,20 @@ Python, Pytest, Playwright, Requests
 3. Install dependencies:
    `pip install --upgrade pip
     pip install -r requirements.txt`
+### Execution and Reporting
+Follow these steps to run tests and view results via the Terminal:
+##### 1. Launch tests
+Use this command to execute tests and collect reporting data. It automatically cleans the results folder before the launch.
+
+`pytest {path_to_test_file} -v --alluredir results --clean-alluredir`
+
+for examle:
+`pytest api/tests/sign_in_test.py -v --alluredir results --clean-alluredir`
+
+##### 2. Open the report
+After the tests are finished, generate and open the visual HTML report in your default browser.
+
+`allure serve results`
+
+
 
