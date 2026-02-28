@@ -22,9 +22,9 @@ class RefreshTokensRequestModel(BaseModel):
 class RefreshTokensResponseModel(BaseModel):
     ok: bool
     result: bool
-    detail: str
-    error: str
-    error_code: int
+    detail: Optional[str] = None
+    error: Optional[str] = None
+    error_code: Optional[int] = None
 
 
 

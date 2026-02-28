@@ -2,7 +2,9 @@ import allure
 import pytest
 
 from api.clients.abra_client import AbraClient
+from api.clients.postgres_client import PostgresClient
 from api.models.abra_model import LoginRequestModel, LoginResponseModel, RefreshTokensResponseModel
+from api.models.postgres_model import UserModel
 from config import settings
 from utils.common_checker import check_difference_between_objects
 
@@ -11,47 +13,47 @@ from utils.common_checker import check_difference_between_objects
 class TestSignIn:
     @allure.title('Successful login as Seller')
     def test_login(
-            self,
-            abra_client: AbraClient,
-            email=settings.EMAIL_SELLER,
-            password=settings.PASSWORD_SELLER
+        self,
+        abra_client: AbraClient,
+        postgres_client: PostgresClient,
+        email=settings.seller.email,
+        password=settings.seller.password
     ):
-            login_request_data = LoginRequestModel(
-                email = email,
-                password = password
-        )
-            login_response = abra_client.login(login_request_data=login_request_data)
-            expected_response = LoginResponseModel(
+        login_request_data = LoginRequestModel(
+            email=email,
+            password=password
+            )
+        login_response = abra_client.login(login_request_data=login_request_data)
+        expected_response = LoginResponseModel(
             ok=True,
             result=True,
-            detail=None,
-            error=None,
-            error_code=None
             )
-            check_difference_between_objects(actual_result=login_response, expected_result=expected_response)
+        check_difference_between_objects(actual_result=login_response, expected_result=expected_response)
+        postgres_client.check_user_from_db(
+            is_deleted=False,
+            is_verified=True,
+            email=email,
+            expected_user=UserModel(
+                email=email,
+                is_verified=True,
+                is_deleted=False
+            )
+        )
+        assert len(postgres_client.get_user_from_db(email=email, is_deleted=False, is_verified=True)) == 1
+
 
 
     @allure.title('Successful token refresh')
     def test_token_refresh(
-            self,
-            abra_client: AbraClient
-
+        self,
+        logged_in_seller: AbraClient,
     ):
-            login_request_data = LoginRequestModel(
-                email = settings.EMAIL_SELLER,
-                password = settings.PASSWORD_SELLER
+        response = logged_in_seller.refresh_tokens()
+        expected_response = RefreshTokensResponseModel(
+            ok=True,
+            result=True
         )
-            login_response = abra_client.login(login_request_data=login_request_data)
-            current_csrf_token = login_response.get_csrf_token()
-            refresh_token = abra_client.refresh_tokens(current_csrf_token=current_csrf_token)
-            expected_response = RefreshTokensResponseModel(
-                ok=True,
-                result=True,
-                detail="",
-                error="",
-                error_code=0
-            )
-            check_difference_between_objects(actual_result=login_response, expected_result=expected_response)
+        check_difference_between_objects(actual_result=response, expected_result=expected_response)
 
 
 

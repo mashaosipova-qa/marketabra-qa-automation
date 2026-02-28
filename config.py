@@ -1,13 +1,33 @@
+from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-class Settings(BaseSettings):
-    BASE_URL_API: str = ""
-    ENVIRONMENT: str = ""
-    EMAIL_SELLER: str = ""
-    PASSWORD_SELLER: str = ""
+#DataBase settings
+class DBConfig(BaseModel):
+    name: str
+    user: str
+    password: str
+    host: str
+    port: int
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+#Seller credentials
+class SellerConfig(BaseModel):
+    email: str = ""
+    password: str = ""
+
+#Aggregates sub-configs (DB, Seller, API)
+class Settings(BaseSettings):
+    base_url_api: str = ""
+    environment: str = ""
+
+    #Nested Data Models
+    db: DBConfig
+    seller: SellerConfig
+
+    model_config=SettingsConfigDict(env_file=".env", env_nested_delimiter="__", extra="ignore")
 
 settings = Settings()
+
+
+
 
 

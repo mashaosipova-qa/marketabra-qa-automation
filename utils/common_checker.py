@@ -1,9 +1,9 @@
-import typing
 from typing import Type, TypeVar
 
 import allure
 from pydantic import BaseModel
 from requests import Response
+from deepdiff import DeepDiff
 
 T = TypeVar("T", bound=BaseModel)
 

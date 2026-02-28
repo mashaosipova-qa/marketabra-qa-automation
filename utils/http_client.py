@@ -1,4 +1,3 @@
-from typing import Optional
 import requests
 import typing
 from config import settings
@@ -9,8 +8,8 @@ from utils.allure_helper import AllureHelper
 class ClientApi:
     def __init__(self) -> None:
         self.settings = settings
-        self.env = settings.ENVIRONMENT
-        self.base_url = settings.BASE_URL_API
+        self.env = settings.environment
+        self.base_url = settings.base_url_api
         self.allure_helper = AllureHelper()
         self._session = self._initialize_session()
 
@@ -31,6 +30,8 @@ class ClientApi:
         verify: bool = False,
         timeout: typing.Optional[float] = None,
     ) -> requests.Response:
+
+
         response = self._session.request(
             method=method,
             url=self.base_url + url,
