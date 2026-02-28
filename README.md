@@ -5,24 +5,35 @@ UI &amp; API test automation for MarketAbra platform
 Python, Pytest, Playwright, Requests
 ### Project Structure
 ```text
-├── api/                        
-│   ├── data/                   
-│   │   └── settings.py          
-│   ├── services/              
-│   │   └── auth_api.py        
-│   ├── tests/                 
-│   │   └── test_auth.py       
-│   └── conftest.py             
-├── ui/                        
-│   ├── data/                 
-│   ├── pages/                
-│   ├── tests/                 
-│   └── conftest.py             
-├── .gitignore                  
-├── LICENSE                    
-├── pytest.ini                 
-├── README.md                   
-└── requirements.txt            
+├── allure_reports
+├── api/
+│   ├── clients/
+│   │   ├── abra_client.py
+│   │   └── postgres_client.py
+│   ├── models/
+│   │   ├── abra_model.py
+│   │   ├── error_model.py
+│   │   └── postgres_model.py
+│   ├── test_data/
+│   └── tests/
+│       ├── conftest.py
+│       └── sign_in_test.py
+├── ui/
+│   ├── data/
+│   ├── pages/
+│   └── tests/
+├── utils/
+│   ├── allure_helper.py
+│   ├── common_checker.py
+│   ├── generator.py
+│   └── http_client.py
+├── results/
+├── .env
+├── .gitignore
+├── config.py
+├── pytest.ini
+├── README.md
+└── requirements.txt          
 ```
 ### Setup and Installation
 1. Clone the repository:
