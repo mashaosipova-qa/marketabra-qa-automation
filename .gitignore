@@ -208,3 +208,6 @@ __marimo__/
 
 
 .idea
+# allure_reports
+allure_reports/
+results/
