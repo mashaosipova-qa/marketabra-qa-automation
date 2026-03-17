@@ -16,6 +16,9 @@ Python, Pytest, Playwright, Requests
 │   │   └── postgres_model.py
 │   ├── test_data/
 │   └── tests/
+|       ├── smoke/
+|       |   └── test_favorites.py
+|       ├── e2e/
 │       ├── conftest.py
 │       └── sign_in_test.py
 ├── ui/
