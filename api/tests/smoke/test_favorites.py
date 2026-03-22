@@ -1,8 +1,6 @@
 import pytest
 import allure
 
-from api.clients.postgres_client import PostgresClient
-from config import settings
 from api.models.abra_model import FavoritesResponseModel, FavoritesRequestModel, FavoritesListResponseModel, \
     FavoritesRemoveResponseModel
 from utils.common_checker import check_difference_between_objects
@@ -34,14 +32,13 @@ class TestFavorites:
             logged_in_seller: AbraClient,
             autogenerate_product
     ):
-        # Request the list of favorites
         response = logged_in_seller.get_favorites()
         expected_response = FavoritesListResponseModel(
             ok=True,
             result=response.result
         )
         check_difference_between_objects(actual_result=response, expected_result=expected_response)
-        # We expect a successful response and a list (even if empty)
+        # Expect a successful response and a list (even if empty)
         assert response.result is not None
         assert isinstance(response.result.products, list), "Expected 'products' to be of type list"
         assert len(response.result.products) == response.result.total_count

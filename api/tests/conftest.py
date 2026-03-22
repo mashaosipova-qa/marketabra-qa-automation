@@ -61,9 +61,10 @@ def autogenerate_product(logged_in_supplier):
 
     if product_id is None:
        pytest.fail(f"Setup failed: Product '{data["name"]}' was created but not found in list.")
+
     yield product_id
 
-    print(f"\n[Cleanup] Deleting product ID: {product_id}")
+    print(f"Cleanup: Delete product_id {product_id}")
     logged_in_supplier.delete_products(product_ids=[product_id])
 
 
