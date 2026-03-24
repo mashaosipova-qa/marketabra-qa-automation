@@ -2,7 +2,7 @@ from typing import Any, Generator
 
 import pytest
 import json
-import time
+
 
 from api.clients.abra_client import AbraClient
 from api.clients.postgres_client import PostgresClient
