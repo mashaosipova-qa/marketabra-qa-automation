@@ -5,7 +5,6 @@ from api.models.abra_model import LoginRequestModel, LoginResponseModel, Refresh
     FavoritesResponseModel, FavoritesRequestModel, FavoritesListRequestModel, FavoritesListResponseModel, \
     FavoritesRemoveResponseModel, ProductUploadRequestModel, ProductUploadResponseModel, ProductsDeleteResponseModel
 from api.models.error_model import ErrorResponseModel
-from typing import Any
 from utils.http_client import ClientApi
 from utils.common_checker import validate_response
 
@@ -73,20 +72,18 @@ class AbraClient(ClientApi):
                         expect_error: bool = False,
                         expected_status_code: int = 200
                         ) -> ProductsDeleteResponseModel | ErrorResponseModel:
-        """ Deletes products by their IDs (sets is_active to False).This is a POST request with a list of products ID in the body"""
+        """ Performs soft delete for products by IDs (sets is_active=False) via POST"""
         response = self.request(
             method="POST",
             url="/suppliers/products/delete",
             data=json.dumps(product_ids)
         )
-
         if expect_error:
             return validate_response(
                 model=ErrorResponseModel,
                 response=response,
                 expected_status_code=expected_status_code
             )
-
         return validate_response(
             model=ProductsDeleteResponseModel,
             response=response,
@@ -95,55 +92,23 @@ class AbraClient(ClientApi):
 
     @allure.step("GET /suppliers/products")
     def get_products_list(self,
-                          expect_error: bool = False,
                           expected_status_code: int = 200,
                           params: dict | None = None
-                          ) -> Any:
-        """ Retrieves and parses NDJSON response from the products endpoint."""
+                          ) -> list:
         response = self.request(
             method="GET",
             url="/suppliers/products",
             params=params
         )
-
-        # Manual status code check since we can't use validate_response directly for NDJSON
-        if response.status_code != expected_status_code:
-            raise AssertionError(f"Expected status {expected_status_code}, but got {response.status_code}")
-
+        assert response.status_code == expected_status_code, f"Expected {expected_status_code}, but got {response.status_code} and response: {response.text}"
+        # Removes extra spaces and breaks the response into separate lines
         lines = response.text.strip().split('\n')
         products = [
-            json.loads(line)
+            json.loads(line) # Converts string line to a dictionary
             for line in lines
             if line.strip() and json.loads(line).get('type') == 'product'
         ]
-
         return products
-
-
-    @allure.step("GET /suppliers/products/{product_id}/variations")
-    def get_product_variations(self,
-                               product_id: int,
-                               expect_error: bool = False,
-                               expected_status_code: int = 200
-                               ) -> ProductUploadResponseModel | ErrorResponseModel:
-
-        response = self.request(
-            method="GET",
-            url=f"/suppliers/products/{product_id}/variations"
-        )
-
-        if expect_error:
-            return validate_response(
-                model=ErrorResponseModel,
-                response=response,
-                expected_status_code=expected_status_code
-            )
-
-        return validate_response(
-            model=ProductUploadResponseModel,  # Ensure this model matches the variation response schema
-            response=response,
-            expected_status_code=expected_status_code
-        )
 
     @allure.step("POST /auth/sign-in/refresh")
     def refresh_tokens(self,

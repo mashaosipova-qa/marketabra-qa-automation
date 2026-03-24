@@ -48,7 +48,7 @@ class TestFavoritesE2E:
             final_db_check = postgres_client.get_favorite_record(seller_id=seller_id, product_id=product_id)
             assert not final_db_check, f"Favorite record for product {product_id} still exists in DB for seller {seller_id}"
 
-        with allure.step("Step 4: Verify favorites list"):
+        with allure.step("Step 4: Remove from favorites and verify DB"):
             fav_response = logged_in_seller.get_favorites()
             assert fav_response.ok is True
             fav_products = [p.id for p in fav_response.result.products]
